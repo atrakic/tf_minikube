@@ -4,6 +4,12 @@ ifndef terraform
     $(error "terraform is not available please install")
 endif
 
+terraform-init:
+	$(terraform) init
+
+terraform-validate:
+	$(terraform) validate -check-variables=false .
+
 terraform-state-list:
 	$(terraform) state list
 

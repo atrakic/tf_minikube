@@ -24,10 +24,10 @@ kubectl-get-rs:
 kubectl-get-deployments:
 	$(kubectl) get deployments
 
-kubectl-get-pods-show-labels:
+kubectl-get-pods:
 	$(kubectl) get po
 
-kubectl-get-pods:
+kubectl-get-pods-show-labels:
 	$(kubectl) get po --show-labels
 
 kubectl-get-services:
