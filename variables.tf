@@ -15,10 +15,10 @@ variable "container_port" {
 
 variable "container_image" {
   description = "What container image to use?"
-  default     = "library/nginx"
+  default     = "atrakic/tf_minikube"
 }
 
 variable "container_version" {
   description = "What container version to use?"
-  default     = "1.7.9"
+  default     = "latest"
 }
