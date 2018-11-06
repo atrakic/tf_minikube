@@ -10,7 +10,7 @@ terraform-init: ## Initialize a Terraform working directory
 terraform-validate: ## Validates the Terraform file
 	$(terraform) validate -check-variables=false .
 
-terraform-state-list:
+terraform-state-list: ## Show current tf states
 	$(terraform) state list
 
 terraform-plan: ## Generate and show an execution plan
@@ -25,5 +25,5 @@ terraform-apply: ## Builds or changes infrastructure
 terraform-refresh: ## Update local state file against real resources
 	$(terraform) refresh
 
-terraform-state-show-arg:
+terraform-state-show-arg: ## Eg. ARG=kubernetes_pod.pod make terraform-state-show-arg
 	$(terraform) state show $(ARG)
