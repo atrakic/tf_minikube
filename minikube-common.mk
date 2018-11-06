@@ -20,6 +20,11 @@ minikube-start: ##
 minikube-stop: ##
 	echo $(minikube) stop
 
+.PHONY: minikube-delete
+minikube-delete: minikube-stop ##
+	echo $(minikube) delete
+	echo rm -rf ~/.minikube ~/.kube
+
 .PHONY: minikube-logs
 minikube-logs:
 	$(minikube) logs

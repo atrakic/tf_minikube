@@ -4,23 +4,26 @@ ifndef terraform
     $(error "terraform is not available please install")
 endif
 
-terraform-init:
+terraform-init: ## Initialize a Terraform working directory
 	$(terraform) init
 
-terraform-validate:
+terraform-validate: ## Validates the Terraform file
 	$(terraform) validate -check-variables=false .
 
 terraform-state-list:
 	$(terraform) state list
 
-terraform-plan:
+terraform-plan: ## Generate and show an execution plan
 	$(terraform) plan
 
-terraform-destroy:
+terraform-destroy: ## Destroy Terraform-managed infrastructure
 	$(terraform) destroy
 
-terraform-apply:
+terraform-apply: ## Builds or changes infrastructure
 	$(terraform) apply
+
+terraform-refresh: ## Update local state file against real resources
+	$(terraform) refresh
 
 terraform-state-show-arg:
 	$(terraform) state show $(ARG)
