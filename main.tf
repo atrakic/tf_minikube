@@ -1,46 +1,32 @@
-resource "kubernetes_namespace" "example" {
+resource "kubernetes_pod" "pod" {
   metadata {
-    annotations {
-      name = "example-annotation"
-    }
+    name = "${local.current}-${var.pod_name}"
     labels {
-      mylabel = "label-value"
-    }
-    name = "terraform-example-namespace"
-  }
-}
-
-resource "kubernetes_pod" "example" {
-  metadata {
-    name = "terraform-example"
-    labels {
-      app = "MyApp"
+      app = "${local.current}-app"
     }
   }
   spec {
     container {
-      image = "nginx:${var.nginx_version}"
-      name  = "example"
+      image = "${var.container_image}:${var.container_version}"
+      name  = "${local.tag}-${var.pod_name}"
+      port {
+        container_port = "${var.container_port}"
+      }
     }
   }
 }
 
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service" "service" {
   metadata {
-    name = "nginx-example"
-    //namespace = "${kubernetes_namespace.example.name}"
+    name = "${local.tag}-${local.current}-service"
   }
   spec {
     selector {
-      App = "${kubernetes_pod.example.metadata.0.labels.app}"
+      app = "${kubernetes_pod.pod.metadata.0.labels.app}"
     }
-    session_affinity = "ClientIP"
     port {
-      name = "http"
-      port = 80
-      target_port = 80
+      port = "${var.container_port}"
     }
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
-
