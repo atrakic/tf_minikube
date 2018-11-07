@@ -27,6 +27,6 @@ resource "kubernetes_service" "service" {
     port {
       port = "${var.container_port}"
     }
-    type = "NodePort"
+    type = "${var.type != "LoadBalancer" ? local.default_type : var.type}"
   }
 }

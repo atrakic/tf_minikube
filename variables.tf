@@ -22,3 +22,8 @@ variable "container_version" {
   description = "What container version to use?"
   default     = "latest"
 }
+
+variable "type" {
+  description = "If k8s env supports LB?"
+  default     = ""
+}
