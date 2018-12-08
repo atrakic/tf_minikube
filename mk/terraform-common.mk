@@ -17,23 +17,23 @@ tf-init: ## Initialize a Terraform working directory
 tf-validate: ## Validates the Terraform file
 	cd $(tfdir) && $(terraform) validate -check-variables=false .
 
-tf-state-list: terraform-apply ## Show current tf states
-	cd $(tfdir) && $(terraform) state list
-
-tf-plan: terraform-init ## Generate and show an execution plan
+tf-plan: tf-init ## Generate and show an execution plan
 	cd $(tfdir) && $(terraform) plan
 
-tf-destroy: terraform-apply ## Destroy Terraform-managed infrastructure
+tf-destroy: tf-apply ## Destroy Terraform-managed infrastructure
 	cd $(tfdir) && $(terraform) destroy
 
-tf-apply: ## Builds or changes infrastructure
+tf-apply: tf-init ## Builds or changes infrastructure
 	cd $(tfdir) && $(terraform) apply -auto-approve
 
-tf-output: terraform-apply ## Output of Terraform working directory
+tf-output: tf-apply ## Output of Terraform working directory
 	cd $(tfdir) && $(terraform) output
 
 tf-refresh: ## Update local state file against real resources
 	cd $(tfdir) && $(terraform) refresh
+
+tf-state-list: terraform-apply ## Show current tf states
+	cd $(tfdir) && $(terraform) state list
 
 tf-state-show-arg: ## Eg. ARG=kubernetes_pod.pod make terraform-state-show-arg
 	cd $(tfdir) && $(terraform) state show $(ARG)
