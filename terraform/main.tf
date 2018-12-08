@@ -1,6 +1,26 @@
+locals {
+  current      = "nginx"
+  tag          = "tf"
+  namespace    = "example"
+  default_type = "NodePort"
+}
+
+resource "kubernetes_namespace" "ns" {
+  metadata {
+    annotations {
+      name = "example-annotation"
+    }
+    labels {
+      "created_by" = "terraform"
+    }
+    name = "${local.tag}-${local.namespace}"
+  }
+}
+
 resource "kubernetes_pod" "pod" {
   metadata {
     name = "${local.current}-${var.pod_name}"
+    namespace = "${local.tag}-${local.namespace}"
     labels {
       app = "${local.current}-app"
     }
@@ -16,9 +36,10 @@ resource "kubernetes_pod" "pod" {
   }
 }
 
-resource "kubernetes_service" "service" {
+resource "kubernetes_service" "srv" {
   metadata {
-    name = "${local.tag}-${local.current}-service"
+    name = "${local.tag}-${local.current}-srv"
+    namespace = "${local.tag}-${local.namespace}"
   }
   spec {
     selector {
