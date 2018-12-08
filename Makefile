@@ -13,12 +13,12 @@ include mk/docker-common.mk
 
 .PHONY: k8s-deploy
 k8s-deploy: ## Deploys this app on k8s with kubectl
-	test -d manifests && kubectl create -f ./manifests
+	@test -d manifests && kubectl create -f ./manifests
 
 .PHONY: k8s-undeploy
 k8s-undeploy: ## Undeploys this app from k8s with kubectl
-	test -f manifests && kubectl delete -f ./manifests
+	@test -f manifests && kubectl delete -f ./manifests
 
 .PHONY: yamllint
 yamllint: ## Lint yaml manifests
-	@yamllint -d relaxed .
+	@cd manifests && yamllint -d relaxed .
