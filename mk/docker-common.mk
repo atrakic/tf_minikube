@@ -1,4 +1,6 @@
 IMAGE_NAME   := $(shell basename $(CURDIR))
+VERSION      ?= $(shell git rev-parse --short HEAD)
+
 DOCKER_REPO  := atrakic
 TAG   	     := latest
 
@@ -8,7 +10,8 @@ endif
 
 .PHONY: docker-build
 docker-build: ## Build the top level Dockerfile using the directory or $IMAGE_NAME as the name.
-	cd $(dockerdir) && test -f Dockerfile && docker build -t $(IMAGE_NAME) .
+	cd $(dockerdir) && test -f Dockerfile && docker build --force-rm -t $(IMAGE_NAME):$(VERSION) . \
+		&& docker tag $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):$(TAG)
 
 .PHONY: docker-tag
 docker-tag: docker-build ## Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
@@ -20,10 +23,7 @@ docker-publish: docker-tag ## Publish the image and tags to a repository.
 
 .PHONY: docker-run
 docker-run: docker-build ## Run this app locally
-	@docker run \
-		-it \
-		-d \
-		--rm \
+	@docker run -it --rm \
          --name $(IMAGE_NAME) \
          $(DOCKER_REPO)/$(IMAGE_NAME):$(TAG)
 
