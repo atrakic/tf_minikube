@@ -37,6 +37,10 @@ minikube-ip: ##
 minikube-addons-enable-ingress: ## Enables nginx ingress controller
 	$(minikube) addons enable ingress
 
+.PHONY: minikube-docker-env
+minikube-docker-env: ## Use minikube docker env
+	@eval $$(minikube docker-env)
+
 .PHONY: minikube-docker-ps
-minikube-docker-ps: ##
-	eval $$(minikube docker-env); docker ps $(ARG)
+minikube-docker-ps: minikube-docker-env ## Usage: ARG="-q -f 'status=exited'" make minikube-docker-ps
+	docker ps $(ARG)
