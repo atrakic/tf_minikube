@@ -10,6 +10,7 @@ include mk/minikube-common.mk
 include mk/kubectl-common.mk
 include mk/terraform-common.mk
 include mk/docker-common.mk
+include mk/shell.mk
 
 .PHONY: k8s-deploy
 k8s-deploy: ## Deploys this app on k8s with kubectl
