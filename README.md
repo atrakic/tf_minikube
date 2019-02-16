@@ -1,24 +1,25 @@
 # TF Minikube
 
-This repository demostrates deploying a simple nginx application with terraform or kubectl on minikube.
+This repository demostrates deploying a simple nginx application with terraform on minikube.
 
 # Usage
 
 First things first:
-- install kubectl
-- install minikube
 - install terraform
+- install minikube
 
 ## Start minikube
 
 ```sh
-make minikube start
+make minikube-start
 ```
 
-## (Optional) build container
 
 ```sh
 make docker-build
+```
+
+## (Optional) pust container
 make docker-tag
 make docker-push
 ```
@@ -27,19 +28,10 @@ make docker-push
 
 ```sh
 make terraform-init    # get latest k8s tf provider
-edit variables.tf      # optionally adjust value with your own image on var.container_image
+edit variables.tf      # optionally adjust value with your own image
 make terraform-plan    # review what would be deployed on minikube
 make terraform-apply   # deploy container with terraform
 make terraform-destroy # deploy container with terraform
-```
-
-## Deploy with kubectl
-
-Place your yaml,json on manifests directory
-
-```sh
-make k8s-deploy
-make k8s-undeploy    # teardown
 ```
 
 # Help
