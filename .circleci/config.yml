@@ -34,6 +34,8 @@ jobs:
           name: Start minikube
           command: |
             sudo -E minikube start --vm-driver=none --cpus 2 --memory 4096 --kubernetes-version=${K8S_VERSION}
+            sudo chown -R circleci ${MINIKUBE_HOME}
+            sudo chgrp -R circleci ${MINIKUBE_HOME}
 
       - run:
           name: Get system pods
