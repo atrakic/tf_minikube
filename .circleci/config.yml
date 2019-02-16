@@ -38,10 +38,7 @@ jobs:
       - run:
           name: Setup terraform
           command: |
-            OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-            TERRAFORM_VERSION="0.11.10"
-            TERRAFORM_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_${OS}_amd64.zip
-            curl '-#' -fL -o /tmp/terraform.zip ${TERRAFORM_URL}
+            curl '-#' -fL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip"
             unzip -q -d /tmp/ /tmp/terraform.zip
             sudo mv /tmp/terraform /usr/local/bin
             rm -f /tmp/terraform.zip
@@ -59,7 +56,7 @@ jobs:
       - run:
           name: Apply with terraform
           command: |
-            cd terraform && terraform apply -input=false -auto-approve
+            cd terraform && terraform apply -auto-approve -input=false
 
       - run:
           name: Perform acceptance test
