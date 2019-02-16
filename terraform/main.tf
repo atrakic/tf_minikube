@@ -1,34 +1,35 @@
 locals {
-  current      = "nginx"
   tag          = "tf"
-  namespace    = "example"
   default_type = "NodePort"
+
+  namespace    = "${var.app}-ns"
+  app          = "${var.app}-app"
 }
 
 resource "kubernetes_namespace" "ns" {
   metadata {
     annotations {
-      name = "example-annotation"
+      name = "${var.app}-annotation"
     }
     labels {
       "created_by" = "terraform"
     }
-    name = "${local.tag}-${local.namespace}"
+    name = "${local.namespace}"
   }
 }
 
 resource "kubernetes_pod" "pod" {
   metadata {
-    name = "${local.current}-${var.pod_name}"
-    namespace = "${local.tag}-${local.namespace}"
+    name = "${var.app}-pod"
+    namespace = "${local.namespace}"
     labels {
-      app = "${local.current}-app"
+      app = "${var.app}-app"
     }
   }
   spec {
     container {
       image = "${var.container_image}:${var.container_version}"
-      name  = "${local.tag}-${var.pod_name}"
+      name  = "${local.tag}-${var.app}"
       port {
         container_port = "${var.container_port}"
       }
@@ -38,8 +39,8 @@ resource "kubernetes_pod" "pod" {
 
 resource "kubernetes_service" "srv" {
   metadata {
-    name = "${local.tag}-${local.current}-srv"
-    namespace = "${local.tag}-${local.namespace}"
+    name = "${var.app}-srv"
+    namespace = "${local.namespace}"
   }
   spec {
     selector {
@@ -48,6 +49,6 @@ resource "kubernetes_service" "srv" {
     port {
       port = "${var.container_port}"
     }
-    type = "${var.type != "LoadBalancer" ? local.default_type : var.type}"
+    type = "${local.default_type}"
   }
 }
