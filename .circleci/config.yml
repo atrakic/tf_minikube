@@ -17,10 +17,6 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Build Docker images
-          command: |
-            make docker-build
 
       - run:
           name: Setup kubectl
@@ -40,11 +36,32 @@ jobs:
             sudo -E minikube start --vm-driver=none --cpus 2 --memory 4096 --kubernetes-version=${K8S_VERSION}
 
       - run:
-          name: Deploy app with terraform
+          name: Setup terraform
           command: |
-            make tf-apply
+            OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+            TERRAFORM_VERSION="0.11.10"
+            TERRAFORM_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_${OS}_amd64.zip
+            curl '-#' -fL -o /tmp/terraform.zip ${TERRAFORM_URL}
+            unzip -q -d /tmp/ /tmp/terraform.zip
+            sudo mv /tmp/terraform /usr/local/bin
+            rm -f /tmp/terraform.zip
+
+      - run:
+          name: Init terraform
+          command: |
+            cd terraform && terraform init
+
+      - run:
+          name: Plan terraform
+          command: |
+            cd terraform && terraform plan
+
+      - run:
+          name: Apply with terraform
+          command: |
+            cd terraform && terraform apply -input=false -auto-approve
 
       - run:
           name: Perform acceptance test
           command:
-            script/acceptance-test.sh
+            ./script/acceptance-test.sh
