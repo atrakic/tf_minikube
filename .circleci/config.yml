@@ -5,6 +5,7 @@ jobs:
     machine:
       image: circleci/classic:201808-01
     environment:
+      TERRAFORM_VERSION: 0.11.11
       K8S_VERSION: v1.12.0
       KUBECONFIG: /home/circleci/.kube/config
       MINIKUBE_VERSION: v0.34.0
@@ -17,6 +18,14 @@ jobs:
 
     steps:
       - checkout
+
+      - run:
+          name: Setup terraform
+          command: |
+            curl '-#' -fL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+            unzip -q -d /tmp/ /tmp/terraform.zip
+            sudo mv /tmp/terraform /usr/local/bin
+            rm -f /tmp/terraform.zip
 
       - run:
           name: Setup kubectl
@@ -41,14 +50,6 @@ jobs:
           name: Get system pods
           command: |
             kubectl -n kube-system get pods
-
-      - run:
-          name: Setup terraform
-          command: |
-            curl '-#' -fL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip"
-            unzip -q -d /tmp/ /tmp/terraform.zip
-            sudo mv /tmp/terraform /usr/local/bin
-            rm -f /tmp/terraform.zip
 
       - run:
           name: Init terraform
