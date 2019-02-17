@@ -26,13 +26,13 @@ tf-destroy: tf-apply ## Destroy Terraform-managed infrastructure
 tf-apply: tf-init ## Builds or changes infrastructure
 	cd $(tfdir) && $(terraform) apply -auto-approve
 
-tf-output: tf-apply ## Output of Terraform working directory
+tf-output: ## Output of Terraform working directory
 	cd $(tfdir) && $(terraform) output
 
 tf-refresh: ## Update local state file against real resources
 	cd $(tfdir) && $(terraform) refresh
 
-tf-state-list: terraform-apply ## Show current tf states
+tf-state-list: ## Show current tf states
 	cd $(tfdir) && $(terraform) state list
 
 tf-state-show-arg: ## Eg. ARG=kubernetes_pod.pod make terraform-state-show-arg
