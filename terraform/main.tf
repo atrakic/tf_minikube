@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.11.14"
+}
+
 locals {
   tag          = "tf"
   default_type = "NodePort"
